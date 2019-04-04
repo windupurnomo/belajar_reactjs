@@ -42,6 +42,20 @@ export default props => {
               Fruit
             </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink className="nav-link" activeClassName="active" to="/city">
+              Kota
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className="nav-link"
+              activeClassName="active"
+              to="/pegawai"
+            >
+              Pegawai
+            </NavLink>
+          </NavItem>
           <UncontrolledDropdown nav inNavbar>
             <DropdownToggle nav caret>
               Options

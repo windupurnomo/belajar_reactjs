@@ -5,9 +5,6 @@ import ToDoList from "./ListItem";
 export default props => {
   const [activity, setActivity] = useState("");
   const [activities, setActivities] = useState([]);
-  const changeAct = e => {
-    setActivity(e.target.value);
-  };
   const submit = e => {
     e.preventDefault();
     setActivity("");
@@ -24,7 +21,7 @@ export default props => {
               type="text"
               placeholder="Tulis Aktifitas >> enter"
               value={activity}
-              onChange={changeAct}
+              onChange={e => setActivity(e.target.value)}
             />
           </form>
         </Col>
