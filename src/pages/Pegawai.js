@@ -7,22 +7,7 @@ export default props => {
   const [email, setEmail] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [address, setAddress] = useState("");
-  const [listPegawai, setListPegawai] = useState([
-    {
-      name: "Zinedine Zidane",
-      phone: "09878787878",
-      email: "zidane@gmail.com",
-      birthDate: "2000/04/20",
-      address: "Ciamis"
-    },
-    {
-      name: "Luis Figo",
-      phone: "09878787876",
-      email: "figo@gmail.com",
-      birthDate: "2000/04/10",
-      address: "Tasikmalaya"
-    }
-  ]);
+  const [listPegawai, setListPegawai] = useState([]);
   const cTr = listPegawai.map((p, i) => {
     return (
       <tr key={i}>
@@ -36,12 +21,14 @@ export default props => {
   });
   const submit = e => {
     e.preventDefault();
-    setName("");
-    setPhone("");
-    setEmail("");
-    setBirthDate("");
-    setAddress("");
-
+    if (name === "") {
+      alert("Nama Pegawai harus diisi");
+      return;
+    }
+    if (phone === "") {
+      alert("Nomor Telepon Pegawai harus diisi");
+      return;
+    }
     const pegawai = {
       name: name,
       phone: phone,
@@ -49,8 +36,12 @@ export default props => {
       birthDate: birthDate,
       address: address
     };
-
     setListPegawai([...listPegawai, pegawai]);
+    setName("");
+    setPhone("");
+    setEmail("");
+    setBirthDate("");
+    setAddress("");
   };
   return (
     <Fragment>
@@ -103,22 +94,30 @@ export default props => {
                 placeholder="Alamat Pegawai"
               />
             </FormGroup>
-            <Button color="primary">Simpan</Button>
+            <Button color="primary" onClick={submit}>
+              Simpan
+            </Button>
           </form>
         </Col>
         <Col>
-          <Table>
-            <thead>
-              <tr>
-                <th>Nama</th>
-                <th>Telepon</th>
-                <th>Email</th>
-                <th>Tgl Lahir</th>
-                <th>Alamat</th>
-              </tr>
-            </thead>
-            <tbody>{cTr}</tbody>
-          </Table>
+          {listPegawai.length === 0 ? (
+            <center>
+              <i>Data belum tersedia</i>
+            </center>
+          ) : (
+            <Table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Telepon</th>
+                  <th>Email</th>
+                  <th>Tgl Lahir</th>
+                  <th>Alamat</th>
+                </tr>
+              </thead>
+              <tbody>{cTr}</tbody>
+            </Table>
+          )}
         </Col>
       </Row>
     </Fragment>
