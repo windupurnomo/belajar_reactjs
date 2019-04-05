@@ -10,6 +10,7 @@ export default props => {
   const [birthDate, setBirthDate] = useState("");
   const [address, setAddress] = useState("");
   const [listPegawai, setListPegawai] = useState([]);
+  const [editMode, setEditMode] = useState(false);
   const getPegawai = () => {
     axios.get("http://localhost:4000/pegawai").then(r => {
       const data = r.data.map((d, i) => {
@@ -20,9 +21,24 @@ export default props => {
     });
   };
   useEffect(getPegawai, []);
+  /**
+   *
+   * edit mode:
+   * - NIP disabled
+   * - tampilkan button delete
+   */
+  const klikBaris = p => {
+    setName(p.name);
+    setPhone(p.phone);
+    setEmail(p.email);
+    setAddress(p.address);
+    setNip(p.nip);
+    setBirthDate(p.birthDate);
+    setEditMode(true);
+  };
   const cTr = listPegawai.map((p, i) => {
     return (
-      <tr key={i}>
+      <tr key={i} onClick={() => klikBaris(p)}>
         <td>{p.name}</td>
         <td>{p.phone}</td>
         <td>{p.email}</td>
@@ -31,6 +47,16 @@ export default props => {
       </tr>
     );
   });
+  const remove = e => {};
+  const cancel = e => {
+    setNip("");
+    setName("");
+    setPhone("");
+    setEmail("");
+    setBirthDate("");
+    setAddress("");
+    setEditMode(false);
+  };
   const submit = e => {
     e.preventDefault();
     if (name === "") {
@@ -72,6 +98,7 @@ export default props => {
             <FormGroup>
               <Label>NIP</Label>
               <Input
+                disabled={editMode}
                 value={nip}
                 onChange={e => setNip(e.target.value)}
                 type="text"
@@ -126,6 +153,12 @@ export default props => {
             <Button color="primary" onClick={submit}>
               Simpan
             </Button>
+            <Button onClick={cancel}>Cancel</Button>
+            {editMode && (
+              <Button color="danger" onClick={remove}>
+                Delete
+              </Button>
+            )}
           </form>
         </Col>
         <Col>
