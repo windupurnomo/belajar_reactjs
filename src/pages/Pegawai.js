@@ -85,19 +85,26 @@ export default props => {
       birthDate: birthDate,
       address: address
     };
-    axios.post("http://localhost:4000/pegawai", pegawai).then(
-      () => {
-        setListPegawai([...listPegawai, pegawai]);
-        setNip("");
-        setName("");
-        setPhone("");
-        setEmail("");
-        setBirthDate("");
-        setAddress("");
-        alert("Data berhasil disimpan");
-      },
-      () => alert("Data gagal disimpan")
-    );
+    if (editMode) update(pegawai);
+    else create(pegawai);
+  };
+  const create = pegawai => {
+    axios
+      .post("http://localhost:4000/pegawai", pegawai)
+      .then(berhasilSimpan, gagalSimpan);
+  };
+  const update = pegawai => {
+    axios
+      .put("http://localhost:4000/pegawai/" + pegawai.nip, pegawai)
+      .then(berhasilSimpan, gagalSimpan);
+  };
+  const berhasilSimpan = () => {
+    getPegawai();
+    cancel();
+    alert("Data berhasil disimpan");
+  };
+  const gagalSimpan = () => {
+    alert("Data gagal disimpan");
   };
   return (
     <Fragment>
