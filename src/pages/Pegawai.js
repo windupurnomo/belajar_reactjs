@@ -47,7 +47,17 @@ export default props => {
       </tr>
     );
   });
-  const remove = e => {};
+  const remove = e => {
+    const b = window.confirm("Apakah Anda yakin akan menghapus data pegawai?");
+    if (!b) return;
+    axios.delete("http://localhost:4000/pegawai/" + nip).then(
+      r => {
+        getPegawai();
+        cancel();
+      },
+      () => alert("Gagal hapus data pegawai")
+    );
+  };
   const cancel = e => {
     setNip("");
     setName("");
