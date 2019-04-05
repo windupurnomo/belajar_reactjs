@@ -1,13 +1,25 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Row, Col, FormGroup, Label, Input, Button, Table } from "reactstrap";
+import axios from "axios";
 
 export default props => {
+  const [nip, setNip] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [address, setAddress] = useState("");
   const [listPegawai, setListPegawai] = useState([]);
+  const getPegawai = () => {
+    axios.get("http://localhost:4000/pegawai").then(r => {
+      const data = r.data.map((d, i) => {
+        d.birthDate = d.birth_date;
+        return d;
+      });
+      setListPegawai(data);
+    });
+  };
+  useEffect(getPegawai, []);
   const cTr = listPegawai.map((p, i) => {
     return (
       <tr key={i}>
@@ -30,18 +42,26 @@ export default props => {
       return;
     }
     const pegawai = {
+      nip: nip,
       name: name,
       phone: phone,
       email: email,
       birthDate: birthDate,
       address: address
     };
-    setListPegawai([...listPegawai, pegawai]);
-    setName("");
-    setPhone("");
-    setEmail("");
-    setBirthDate("");
-    setAddress("");
+    axios.post("http://localhost:4000/pegawai", pegawai).then(
+      () => {
+        setListPegawai([...listPegawai, pegawai]);
+        setNip("");
+        setName("");
+        setPhone("");
+        setEmail("");
+        setBirthDate("");
+        setAddress("");
+        alert("Data berhasil disimpan");
+      },
+      () => alert("Data gagal disimpan")
+    );
   };
   return (
     <Fragment>
@@ -49,6 +69,15 @@ export default props => {
       <Row>
         <Col md={4}>
           <form onSubmit={submit}>
+            <FormGroup>
+              <Label>NIP</Label>
+              <Input
+                value={nip}
+                onChange={e => setNip(e.target.value)}
+                type="text"
+                placeholder="NIP Pegawai"
+              />
+            </FormGroup>
             <FormGroup>
               <Label>Nama</Label>
               <Input
